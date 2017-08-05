@@ -1,33 +1,34 @@
+// Require libraries
 var http = require('http');
 var fs = require('fs');
 
-
-var port = 4000;
+// Set up vars
+var port = 3000;
 var host = 'localhost';
+var responseCode = {
+  success: 200,
+  notFound: 404
+};
 
-
-var server = http.createServer(function(req, res) {
-  fs.readFile('./public/index.html', 'utf8', function(err, data) {
+// Create a server
+var server = http.createServer(function(request, response){
+  fs.readFile('./public/index.html', 'utf8', function(err, data){
     if (err) {
-      res.writeHead(404);
-      res.end("404 Not Found");
+      response.writeHead(responseCode.notFound);
+      response.end("Whoops! That page doesn't seem to exist.");
     } else {
-      res.writeHead(200, {
+      response.writeHead(responseCode.success, {
         "Content-Type": "text/html"
       });
-      res.end(data);
+      response.end(data);
     }
   });
 });
 
 
+// Run the server
 server.listen(port, host, function() {
   console.log(`Listening at http://${ host }:${ port }`);
 });
-
-
-
-
-
 
 
